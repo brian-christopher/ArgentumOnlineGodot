@@ -11,6 +11,9 @@ func _ready() -> void:
 	%ShowPasswordButton.toggle_mode = true
 	%ShowPasswordButton.button_pressed = false
 	
+	# Set initial button text based on OS
+	_update_password_button_text(false)
+	
 	# Load saved credentials if they exist
 	var credentials = SavedCredentials.load_credentials()
 	if credentials.username != "" and credentials.password != "":
@@ -20,11 +23,22 @@ func _ready() -> void:
 
 func _on_show_password_toggled(button_pressed: bool) -> void:
 	%Password.secret = !button_pressed
-	if button_pressed:
-		%ShowPasswordButton.text = "🙈"
+	_update_password_button_text(button_pressed)
+
+func _update_password_button_text(showing_password: bool) -> void:
+	var is_windows = OS.get_name() == "Windows"
+	
+	if showing_password:
+		if is_windows:
+			%ShowPasswordButton.text = "🙈"
+		else:
+			%ShowPasswordButton.text = "Ocultar"
 		%ShowPasswordButton.tooltip_text = "Ocultar contraseña"
 	else:
-		%ShowPasswordButton.text = "👁️"
+		if is_windows:
+			%ShowPasswordButton.text = "👁️"
+		else:
+			%ShowPasswordButton.text = "Ver"
 		%ShowPasswordButton.tooltip_text = "Mostrar contraseña"
 
 func GetUsername() -> String:
