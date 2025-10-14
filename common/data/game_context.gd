@@ -27,5 +27,6 @@ var userNavegando:bool
 var usingSkill:int
 
 var pingTime:int
+var lastPing:int = 0
 
 var player_map:int 

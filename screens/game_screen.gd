@@ -19,6 +19,8 @@ var _gameContext:GameContext = GameContext.new()
 var _mainCharacterInstanceId:int = -1
 var networkMessages:Array[PackedByteArray]
 
+@onready var _lblPing:Label = %LblPing
+
 var _input:Dictionary[String, int] = {
 	"ui_left" = Enums.Heading.West,
 	"ui_right" = Enums.Heading.East,
@@ -402,7 +404,21 @@ func _HandleShowMessageBox(p:ShowMessageBox) -> void:
 
 
 func _HandlePong() -> void:
-	print("Ping: %dms" % (Time.get_ticks_msec() - _gameContext.pingTime))
+	var ping_ms = Time.get_ticks_msec() - _gameContext.pingTime
+	_gameContext.lastPing = ping_ms
+	print("Ping: %dms" % ping_ms)
+	
+	if _lblPing:
+		_lblPing.text = "Ping: %dms" % ping_ms
+		
+		# Cambiar color según latencia
+		if ping_ms < 100:
+			_lblPing.add_theme_color_override("font_color", Color(0.2, 1, 0.2))  # Verde
+		elif ping_ms < 200:
+			_lblPing.add_theme_color_override("font_color", Color(1, 1, 0.2))  # Amarillo
+		else:
+			_lblPing.add_theme_color_override("font_color", Color(1, 0.2, 0.2))  # Rojo
+	
 	_gameContext.pingTime = 0
 
 
