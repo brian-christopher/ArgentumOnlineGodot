@@ -5,5 +5,9 @@
 .github/
 /android/
 
+# Import files
+*.import
+
+# Binaries
 *.exe
 *.pck
