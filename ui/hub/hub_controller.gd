@@ -414,6 +414,7 @@ func _meditate() -> void:
 	var stats = _gameContext.player_stats 
 	
 	if stats.mana == stats.max_mana:
+		ShowConsoleMessage("No puedes entrar en meditación, tu maná ya está completo.", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
 		return
 	
 	if !stats.is_alive():
