@@ -73,30 +73,19 @@ static func GetUnicodeString(stream:StreamPeer) -> String:
 	var size = stream.get_16()
 	if size > 0:
 		var data:PackedByteArray = stream.get_data(size)[1]
-		return data.get_string_from_ascii() 
+		return data.get_string_from_utf8() 
 	return ""
 	
 static func Utf8ToLatin1(text:String) -> PackedByteArray:
-	var latin1_bytes = PackedByteArray()
-	
-	for c in text:
-		var code = c.unicode_at(0)
-		
-		# Latin-1 solo admite caracteres entre 0-255
-		if code <= 255:
-			latin1_bytes.append(code)
-		else:
-			# Reemplazar caracteres fuera de Latin-1 con '?'
-			latin1_bytes.append(63)  # 63 = '?'
-
-	return latin1_bytes
+	# Ahora retorna UTF-8 en lugar de Latin-1
+	return text.to_utf8_buffer()
 	
 static func PutUnicodeString(stream:StreamPeer, text:String) -> void:
 	if text.length() == 0:
 		stream.put_16(0)
 		return
 	
-	var data = Utf8ToLatin1(text)
+	var data = text.to_utf8_buffer()
 	stream.put_16(data.size())
 	stream.put_data(data)
 
