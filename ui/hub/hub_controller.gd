@@ -147,6 +147,10 @@ func update_level_label(value:int) -> void:
 
 func update_name_label(value:String) -> void:
 	%LblName.text = str(value)
+
+
+func update_coordinates_label(x:int, y:int, map_id:int) -> void:
+	%LblCoordinates.text = "(%d,%d) M: %d" % [x, y, map_id]
 	
 	
 func update_equipment_label(slot:int, item_stack:ItemStack) -> void:

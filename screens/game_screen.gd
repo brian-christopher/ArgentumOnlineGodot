@@ -105,6 +105,7 @@ func _MovePlayer(heading:int) -> void:
 			GameProtocol.WriteChangeHeading(heading)
 	
 	_gameInput.minimap.update_player_position(character.gridPosition.x, character.gridPosition.y)
+	_gameInput.update_coordinates_label(character.gridPosition.x, character.gridPosition.y, _gameContext.player_map)
 	 
 func _CanMoveTo(x:int, y:int) -> bool:
 	var map = _gameWorld.GetMapContainer()
@@ -540,6 +541,7 @@ func _HandlePosUpdate(p:PosUpdate) -> void:
 		character.gridPosition = Vector2i(p.x, p.y)
 		character.position = Vector2((p.x - 1) * 32, (p.y - 1) * 32) + Vector2(16, 32);
 		_gameInput.minimap.update_player_position(p.x, p.y)
+		_gameInput.update_coordinates_label(p.x, p.y, _gameContext.player_map)
 
 
 func _HandleForceCharMove(p:ForceCharMove) -> void:
@@ -686,6 +688,10 @@ func _HandleUserCharIndexInServer(p:UserCharIndexInServer) -> void:
 		_gameInput.minimap.update_player_position(
 			character.gridPosition.x,\
 			 character.gridPosition.y)
+		_gameInput.update_coordinates_label(
+			character.gridPosition.x,
+			character.gridPosition.y,
+			_gameContext.player_map)
 
 
 func _HandleCreateFx(p:CreateFx) -> void:
@@ -771,6 +777,10 @@ func _HandleChangeMap(p:ChangeMap) -> void:
 	_gameWorld.SwitchMap(p.mapId)
 	_gameContext.player_map = p.mapId
 	_gameInput.minimap.load_thumbnail(p.mapId)
+	# Actualizar coordenadas con el nuevo mapa
+	var character = _gameWorld.GetCharacter(_mainCharacterInstanceId)
+	if character:
+		_gameInput.update_coordinates_label(character.gridPosition.x, character.gridPosition.y, p.mapId)
 		
 		
 func _HandleChangeSpellSlot(p:ChangeSpellSlot) -> void:

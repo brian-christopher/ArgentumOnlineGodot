@@ -256,6 +256,22 @@ vertical_alignment = 1
 clip_text = true
 metadata/_edit_lock_ = true
 
+[node name="LblCoordinates" type="Label" parent="HubController/Labels"]
+unique_name_in_owner = true
+offset_left = 680.0
+offset_top = 565.0
+offset_right = 788.0
+offset_bottom = 588.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Pos: (0, 0) M:0"
+horizontal_alignment = 2
+vertical_alignment = 1
+clip_text = true
+metadata/_edit_lock_ = true
+
 [node name="StatBars" type="Node" parent="HubController"]
 
 [node name="StaminaStatBar" parent="HubController/StatBars" instance=ExtResource("13_u317p")]
