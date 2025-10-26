@@ -70,6 +70,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Recordar contraseña"
 
+[node name="UseSSL" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Usar conexión SSL"
+
 [node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 10

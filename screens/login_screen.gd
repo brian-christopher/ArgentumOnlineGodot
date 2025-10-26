@@ -60,12 +60,12 @@ func _HandleLogged(data:PackedByteArray) -> void:
 	ScreenController.SwitchScreen(screen)
 		
 func _OnLoginPanelSubmit() -> void:
-	_ConnectToHost(State.Login)
-		
+	_ConnectToHost(State.Login, _loginPanel.IsSSLSelected())
+
 func _OnLoginPanelRegister() -> void:
-	_ConnectToHost(State.NewPj)
+	_ConnectToHost(State.NewPj, _loginPanel.IsSSLSelected())
 		
-func _ConnectToHost(state:State) -> void:
+func _ConnectToHost(state:State, use_ssl:bool = false) -> void:
 	#if ClientInterface.IsConnected():
 	#	ClientInterface.DisconnectFromHost()
 		
@@ -73,7 +73,7 @@ func _ConnectToHost(state:State) -> void:
 	_loginPanel.DisableAuthControls()
 	
 	var endpoint = _GetEnpoint()
-	ClientInterface.ConnectToHost(endpoint.ip, endpoint.port)
+	ClientInterface.ConnectToHost(endpoint.ip, endpoint.port, use_ssl)
 
 func _Flush() -> void:
 	ClientInterface.Send(GameProtocol.Flush());

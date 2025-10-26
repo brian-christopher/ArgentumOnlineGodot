@@ -18,6 +18,8 @@ func _ready() -> void:
 		%Password.text = credentials.password
 		%RememberPassword.button_pressed = true
 
+	%UseSSL.button_pressed = SavedCredentials.load_ssl_preference()
+
 func _on_show_password_toggled(button_pressed: bool) -> void:
 	%Password.secret = !button_pressed
 	if button_pressed:
@@ -79,5 +81,10 @@ func _OnButtonLoginPressed() -> void:
 		SavedCredentials.save_credentials(%Username.text, %Password.text)
 	else:
 		SavedCredentials.clear_credentials()
-	
+
+	SavedCredentials.save_ssl_preference(%UseSSL.button_pressed)
+
 	submit.emit()
+
+func IsSSLSelected() -> bool:
+	return %UseSSL.button_pressed
