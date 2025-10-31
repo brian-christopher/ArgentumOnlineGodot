@@ -370,9 +370,10 @@ static func WritePartyCreate() -> void:
 	_writer.put_u8(Enums.ClientPacketID.PartyCreate)
 
 
-static func WritePartyJoin() -> void:
+static func WritePartyJoin(nickname: String) -> void:
 	_log_outgoing_packet("PartyJoin")
 	_writer.put_u8(Enums.ClientPacketID.PartyJoin)
+	_writer.put_string(nickname)
 
 
 static func WriteShareNpc() -> void:

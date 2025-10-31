@@ -318,7 +318,12 @@ static func party_join(args:ChatCommandArgs) -> void:
 		args.hub_controller.ShowConsoleMessage("¡¡Estás muerto!!", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
 		return
 	
-	GameProtocol.WritePartyJoin()
+	if args.parameters.size() == 0:
+		args.hub_controller.ShowConsoleMessage("Debes especificar un nombre de usuario. Uso: /PARTY <nombre>", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
+		return
+	
+	var nickname = args.parameters[0]
+	GameProtocol.WritePartyJoin(nickname)
 
 
 static func share_npc(args:ChatCommandArgs) -> void:
