@@ -3,12 +3,19 @@ extends Node
 signal connected
 signal disconnected
 signal dataReceived(data:PackedByteArray)
+signal connection_failed(message:String)
 
 # Constante para habilitar/deshabilitar el log de paquetes
 const LOG_PACKETS := true
+const CONNECTION_TIMEOUT_SECONDS := 5.0
 
 var _socket:StreamPeerTCP = StreamPeerTCP.new()
 var _status:int
+var _pending_connection := false
+var _connect_deadline := 0.0
+
+func _get_current_time_seconds() -> float:
+	return Time.get_ticks_msec() * 0.001
 
 func _ready() -> void:
 	_status = StreamPeerTCP.STATUS_NONE
@@ -16,9 +23,24 @@ func _ready() -> void:
 	
 func ConnectToHost(host:String, port:int) -> void:
 	_status = StreamPeerTCP.STATUS_NONE
-	set_process(_socket.connect_to_host(host, port) == OK)
+	_pending_connection = false
+	_connect_deadline = 0.0
+	if _socket.get_status() != StreamPeerTCP.STATUS_NONE:
+		_socket.disconnect_from_host()
+	_socket = StreamPeerTCP.new()
+	var result := _socket.connect_to_host(host, port)
+	if result == OK:
+		_pending_connection = true
+		_connect_deadline = _get_current_time_seconds() + CONNECTION_TIMEOUT_SECONDS
+		set_process(true)
+	else:
+		connection_failed.emit("No se pudo iniciar la conexión (código %d)." % result)
+		disconnected.emit()
+		set_process(false)
 
 func DisconnectFromHost() -> void:
+	_pending_connection = false
+	_connect_deadline = 0.0
 	_socket.disconnect_from_host()
 
 func Send(data:PackedByteArray) -> void:
@@ -34,14 +56,36 @@ func _process(_delta: float) -> void:
 		
 		match _status:
 			StreamPeerTCP.STATUS_NONE:
+				set_process(false)
+				_pending_connection = false
+				_connect_deadline = 0.0
 				disconnected.emit()
 			StreamPeerTCP.STATUS_CONNECTING:
 				pass
 			StreamPeerTCP.STATUS_CONNECTED:
+				_pending_connection = false
+				_connect_deadline = 0.0
 				connected.emit()
 			StreamPeerTCP.STATUS_ERROR:
+				var notify_failure := _pending_connection
+				_pending_connection = false
+				_connect_deadline = 0.0
+				set_process(false)
+				if notify_failure:
+					connection_failed.emit("No se pudo conectar con el servidor.")
 				disconnected.emit()
-			
+				return
+		
+	if _status == StreamPeerTCP.STATUS_CONNECTING && _pending_connection:
+		if _get_current_time_seconds() >= _connect_deadline:
+			_pending_connection = false
+			_connect_deadline = 0.0
+			_socket.disconnect_from_host()
+			connection_failed.emit("Tiempo de conexión agotado.")
+			disconnected.emit()
+			set_process(false)
+			return
+		
 	if _status == StreamPeerTCP.STATUS_CONNECTED:
 		var availableBytes = _socket.get_available_bytes()
 		if availableBytes > 0:

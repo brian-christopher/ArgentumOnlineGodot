@@ -14,6 +14,7 @@ func _ready() -> void:
 	ClientInterface.connected.connect(_OnConnected)
 	ClientInterface.disconnected.connect(_OnDisconnected)
 	ClientInterface.dataReceived.connect(_OnDataReceived)
+	ClientInterface.connection_failed.connect(_OnConnectionFailed)
 	
 	_loginPanel.error.connect(func(message): 
 		Utils.ShowAlertDialog("Login", message, self)) 
@@ -30,6 +31,11 @@ func _OnDisconnected() -> void:
 	_state = State.None
 	_loginPanel.EnableAuthControls()
 	
+func _OnConnectionFailed(message:String) -> void:
+	_state = State.None
+	_loginPanel.EnableAuthControls()
+	Utils.ShowAlertDialog("Conexión", message, self)
+
 func _GetEnpoint() -> Dictionary:
 	return {
 		"ip": %Ip.text,
