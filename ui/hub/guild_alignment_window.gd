@@ -11,6 +11,8 @@ enum AlignmentType {
 }
 
 func _ready() -> void:
+	print("[DEBUG] GuildAlignmentWindow _ready() iniciado")
+	
 	# Conectar señales de los botones
 	$VBox/RealButton.pressed.connect(_on_alignment_button_pressed.bind(AlignmentType.REAL))
 	$VBox/ChaosButton.pressed.connect(_on_alignment_button_pressed.bind(AlignmentType.CAOS))
@@ -21,6 +23,8 @@ func _ready() -> void:
 	
 	# Conectar señal de cierre de la ventana
 	close_requested.connect(_on_close_requested)
+	
+	print("[DEBUG] GuildAlignmentWindow señales conectadas correctamente")
 
 # Manejador para cuando se presiona la X de la ventana
 func _on_close_requested() -> void:
@@ -33,8 +37,12 @@ func _on_close_button_pressed() -> void:
 
 # Manejador para los botones de alineación
 func _on_alignment_button_pressed(alignment_type: int) -> void:
+	print("[DEBUG] Botón de alineación presionado: ", alignment_type)
+	
 	# Enviar la alineación seleccionada al servidor
+	print("[DEBUG] Enviando WriteGuildFundation al servidor...")
 	GameProtocol.WriteGuildFundation(alignment_type)
+	print("[DEBUG] WriteGuildFundation enviado")
 	
 	# Cerrar la ventana
 	hide()

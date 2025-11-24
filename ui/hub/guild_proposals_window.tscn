@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://wek2gjke3qy"]
+
+[ext_resource type="Script" uid="uid://cw35dppq5esy6" path="res://ui/hub/guild_proposals_window.gd" id="1_guild_proposals"]
+
+[node name="GuildProposalsWindow" type="Window"]
+oversampling_override = 1.0
+title = "Propuestas de Paz/Alianza"
+initial_position = 1
+size = Vector2i(500, 350)
+script = ExtResource("1_guild_proposals")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -20.0
+
+[node name="InfoLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Selecciona un clan de la lista:"
+
+[node name="ProposalsList" type="ItemList" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="SelectedLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Clan seleccionado: Ninguno"
+
+[node name="HSeparator3" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cerrar"
+
+[node name="DetailsBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ver Detalles"
+
+[node name="AcceptBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Aceptar"
+
+[node name="RejectBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rechazar"
+
+[connection signal="item_selected" from="VBox/ProposalsList" to="." method="_on_proposals_list_item_selected"]
+[connection signal="pressed" from="VBox/ButtonsContainer/CloseBtn" to="." method="_on_close_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/DetailsBtn" to="." method="_on_details_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/AcceptBtn" to="." method="_on_accept_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/RejectBtn" to="." method="_on_reject_btn_pressed"]

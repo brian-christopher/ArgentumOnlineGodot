@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvxq8y0j2n3m4"]
+
+[ext_resource type="Script" path="res://ui/hub/spell_learn_dialog.gd" id="1_spell_learn"]
+
+[node name="SpellLearnDialog" type="Window"]
+script = ExtResource("1_spell_learn")
+title = "Aprender Hechizo"
+size = Vector2i(350, 150)
+min_size = Vector2i(350, 150)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 36.0
+offset_right = -8.0
+offset_bottom = -8.0
+
+[node name="Label" type="Label" parent="VBox"]
+layout_mode = 2
+text = "¿Deseas aprender el hechizo:"
+horizontal_alignment = 1
+
+[node name="SpellNameLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "[Nombre del hechizo]"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="CancelButton" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+text = "Cancelar"
+
+[node name="AcceptButton" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+text = "Aprender"
+
+[connection signal="pressed" from="VBox/ButtonsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/AcceptButton" to="." method="_on_accept_button_pressed"]

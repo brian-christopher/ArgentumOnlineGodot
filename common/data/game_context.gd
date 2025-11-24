@@ -18,6 +18,9 @@ var traveling:bool
 var trading:bool
 var pause:bool
 var mirandoForo:bool
+
+# Sistema de ping
+var pingTime:int = 0
 var userParalizado:bool
 var userCiego:bool
 var userEstupido:bool
@@ -25,7 +28,5 @@ var userDescansar:bool
 var userMeditar:bool
 var userNavegando:bool
 var usingSkill:int
-
-var pingTime:int
 
 var player_map:int 

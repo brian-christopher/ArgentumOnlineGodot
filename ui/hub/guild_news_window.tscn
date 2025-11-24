@@ -1,0 +1,84 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfa7433q3kxhp"]
+
+[ext_resource type="Script" uid="uid://cpw80sm8jupyi" path="res://ui/hub/guild_news_window.gd" id="1_guild_news"]
+
+[node name="GuildNewsWindow" type="Window"]
+oversampling_override = 1.0
+title = "Noticias del Clan"
+initial_position = 1
+size = Vector2i(540, 427)
+script = ExtResource("1_guild_news")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -110.0
+
+[node name="NewsLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Últimas Noticias:"
+
+[node name="NewsScroll" type="ScrollContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 119)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NewsText" type="TextEdit" parent="VBox/NewsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="EnemiesLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Clanes Enemigos:"
+
+[node name="EnemiesScroll" type="ScrollContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="EnemiesText" type="TextEdit" parent="VBox/EnemiesScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="HSeparator3" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="AlliesLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Clanes Aliados:"
+
+[node name="AlliesScroll" type="ScrollContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="AlliesText" type="TextEdit" parent="VBox/AlliesScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="HSeparator4" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cerrar"
+
+[connection signal="pressed" from="VBox/ButtonsContainer/CloseBtn" to="." method="_on_close_btn_pressed"]

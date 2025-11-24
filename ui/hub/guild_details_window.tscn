@@ -1,0 +1,166 @@
+[gd_scene load_steps=2 format=3 uid="uid://b64100x1huem"]
+
+[ext_resource type="Script" uid="uid://ms3gjjgwqxnl" path="res://ui/hub/guild_details_window.gd" id="1_guild_details"]
+
+[node name="GuildDetailsWindow" type="Window"]
+oversampling_override = 1.0
+title = "Editar Códex del Clan"
+initial_position = 1
+size = Vector2i(600, 535)
+script = ExtResource("1_guild_details")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="DescLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Descripción del Clan:"
+
+[node name="DescText" type="TextEdit" parent="VBox"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+placeholder_text = "Escribe la descripción del clan..."
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="CodexLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Códex del Clan (mínimo 4 mandamientos):"
+
+[node name="CodexScroll" type="ScrollContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CodexContainer" type="VBoxContainer" parent="VBox/CodexScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex0Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer"]
+layout_mode = 2
+text = "1. "
+
+[node name="Codex0" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Primer mandamiento..."
+max_length = 100
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex1Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer2"]
+layout_mode = 2
+text = "2. "
+
+[node name="Codex1" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Segundo mandamiento..."
+max_length = 100
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex2Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer3"]
+layout_mode = 2
+text = "3. "
+
+[node name="Codex2" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Tercer mandamiento..."
+max_length = 100
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex3Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer4"]
+layout_mode = 2
+text = "4. "
+
+[node name="Codex3" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Cuarto mandamiento..."
+max_length = 100
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex4Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer5"]
+layout_mode = 2
+text = "5. "
+
+[node name="Codex4" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Quinto mandamiento (opcional)..."
+max_length = 100
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex5Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer6"]
+layout_mode = 2
+text = "6. "
+
+[node name="Codex5" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Sexto mandamiento (opcional)..."
+max_length = 100
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex6Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer7"]
+layout_mode = 2
+text = "7. "
+
+[node name="Codex6" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer7"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Séptimo mandamiento (opcional)..."
+max_length = 100
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+
+[node name="Codex7Label" type="Label" parent="VBox/CodexScroll/CodexContainer/HBoxContainer8"]
+layout_mode = 2
+text = "8. "
+
+[node name="Codex7" type="LineEdit" parent="VBox/CodexScroll/CodexContainer/HBoxContainer8"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Octavo mandamiento (opcional)..."
+max_length = 100
+
+[node name="HSeparator3" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="CancelBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancelar"
+
+[node name="ConfirmBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Confirmar"
+
+[connection signal="pressed" from="VBox/ButtonsContainer/CancelBtn" to="." method="_on_cancel_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/ConfirmBtn" to="." method="_on_confirm_btn_pressed"]

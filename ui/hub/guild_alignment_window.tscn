@@ -1,12 +1,89 @@
-[gd_scene load_steps=2 format=3 uid="uid://dh5nt7ilka0e"]
+[gd_scene load_steps=3 format=3 uid="uid://dh5nt7ilka0e"]
 
 [ext_resource type="Script" uid="uid://se6o621e1ed6" path="res://ui/hub/guild_alignment_window.gd" id="1_9q3e2"]
 
+[sub_resource type="FontFile" id="FontFile_kcjbv"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/2/0/ascent = 0.0
+cache/0/2/0/descent = 0.0
+cache/0/2/0/underline_position = 0.0
+cache/0/2/0/underline_thickness = 0.0
+cache/0/2/0/scale = 1.0
+cache/0/3/0/ascent = 0.0
+cache/0/3/0/descent = 0.0
+cache/0/3/0/underline_position = 0.0
+cache/0/3/0/underline_thickness = 0.0
+cache/0/3/0/scale = 1.0
+cache/0/4/0/ascent = 0.0
+cache/0/4/0/descent = 0.0
+cache/0/4/0/underline_position = 0.0
+cache/0/4/0/underline_thickness = 0.0
+cache/0/4/0/scale = 1.0
+cache/0/5/0/ascent = 0.0
+cache/0/5/0/descent = 0.0
+cache/0/5/0/underline_position = 0.0
+cache/0/5/0/underline_thickness = 0.0
+cache/0/5/0/scale = 1.0
+cache/0/6/0/ascent = 0.0
+cache/0/6/0/descent = 0.0
+cache/0/6/0/underline_position = 0.0
+cache/0/6/0/underline_thickness = 0.0
+cache/0/6/0/scale = 1.0
+cache/0/7/0/ascent = 0.0
+cache/0/7/0/descent = 0.0
+cache/0/7/0/underline_position = 0.0
+cache/0/7/0/underline_thickness = 0.0
+cache/0/7/0/scale = 1.0
+cache/0/8/0/ascent = 0.0
+cache/0/8/0/descent = 0.0
+cache/0/8/0/underline_position = 0.0
+cache/0/8/0/underline_thickness = 0.0
+cache/0/8/0/scale = 1.0
+cache/0/9/0/ascent = 0.0
+cache/0/9/0/descent = 0.0
+cache/0/9/0/underline_position = 0.0
+cache/0/9/0/underline_thickness = 0.0
+cache/0/9/0/scale = 1.0
+cache/0/10/0/ascent = 0.0
+cache/0/10/0/descent = 0.0
+cache/0/10/0/underline_position = 0.0
+cache/0/10/0/underline_thickness = 0.0
+cache/0/10/0/scale = 1.0
+cache/0/11/0/ascent = 0.0
+cache/0/11/0/descent = 0.0
+cache/0/11/0/underline_position = 0.0
+cache/0/11/0/underline_thickness = 0.0
+cache/0/11/0/scale = 1.0
+cache/0/12/0/ascent = 0.0
+cache/0/12/0/descent = 0.0
+cache/0/12/0/underline_position = 0.0
+cache/0/12/0/underline_thickness = 0.0
+cache/0/12/0/scale = 1.0
+cache/0/13/0/ascent = 0.0
+cache/0/13/0/descent = 0.0
+cache/0/13/0/underline_position = 0.0
+cache/0/13/0/underline_thickness = 0.0
+cache/0/13/0/scale = 1.0
+cache/0/14/0/ascent = 0.0
+cache/0/14/0/descent = 0.0
+cache/0/14/0/underline_position = 0.0
+cache/0/14/0/underline_thickness = 0.0
+cache/0/14/0/scale = 1.0
+cache/0/15/0/ascent = 0.0
+cache/0/15/0/descent = 0.0
+cache/0/15/0/underline_position = 0.0
+cache/0/15/0/underline_thickness = 0.0
+cache/0/15/0/scale = 1.0
+
 [node name="GuildAlignmentWindow" type="Window"]
+oversampling_override = 1.0
 title = "Elige la Alineación de tu Clan"
 position = Vector2i(0, 36)
-size = Vector2i(400, 550)  # Ajustado para incluir el botón de cierre
-close_requested = "_on_close_requested"
+size = Vector2i(400, 457)
 script = ExtResource("1_9q3e2")
 
 [node name="VBox" type="VBoxContainer" parent="."]
@@ -16,7 +93,7 @@ anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
-offset_bottom = -20.0
+offset_bottom = -10.0
 theme_override_constants/separation = 15
 
 [node name="TitleLabel" type="Label" parent="VBox"]
@@ -27,38 +104,48 @@ text = "Selecciona la alineación de tu clan:"
 horizontal_alignment = 1
 
 [node name="RealButton" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_fonts/font = SubResource("FontFile_kcjbv")
+theme_override_font_sizes/font_size = 16
 text = "Real"
 
 [node name="ChaosButton" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_fonts/font = SubResource("FontFile_kcjbv")
+theme_override_font_sizes/font_size = 16
 text = "Caos"
 
 [node name="NeutralButton" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_fonts/font = SubResource("FontFile_kcjbv")
+theme_override_font_sizes/font_size = 16
 text = "Neutral"
 
 [node name="LegalButton" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_fonts/font = SubResource("FontFile_kcjbv")
+theme_override_font_sizes/font_size = 16
 text = "Legal"
 
 [node name="CriminalButton" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_fonts/font = SubResource("FontFile_kcjbv")
+theme_override_font_sizes/font_size = 16
 text = "Criminal"
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
@@ -72,6 +159,5 @@ alignment = 1
 [node name="CloseButton" type="Button" parent="VBox/ButtonsContainer"]
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
-size_flags_horizontal = 1
 size_flags_vertical = 4
 text = "Cerrar"

@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd8632202jwgo"]
+
+[ext_resource type="Script" uid="uid://c2w5wsdt8ggtc" path="res://ui/hub/guild_vote_window.gd" id="1_guild_vote"]
+
+[node name="GuildVoteWindow" type="Window"]
+oversampling_override = 1.0
+title = "Elecciones de Líder del Clan"
+initial_position = 1
+size = Vector2i(460, 360)
+script = ExtResource("1_guild_vote")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="InfoLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Selecciona un miembro para votar como nuevo líder del clan:"
+autowrap_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="FilterLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Filtrar miembros:"
+
+[node name="FilterInput" type="LineEdit" parent="VBox"]
+layout_mode = 2
+placeholder_text = "Buscar miembro..."
+
+[node name="MembersList" type="ItemList" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator3" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="SelectedLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Candidato seleccionado: Ninguno"
+
+[node name="HSeparator4" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="CancelBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancelar"
+
+[node name="VoteBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Votar"
+
+[connection signal="text_changed" from="VBox/FilterInput" to="." method="_on_filter_input_text_changed"]
+[connection signal="item_selected" from="VBox/MembersList" to="." method="_on_members_list_item_selected"]
+[connection signal="pressed" from="VBox/ButtonsContainer/CancelBtn" to="." method="_on_cancel_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/VoteBtn" to="." method="_on_vote_btn_pressed"]

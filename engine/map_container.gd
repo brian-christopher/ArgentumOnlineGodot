@@ -58,6 +58,10 @@ func GetCharacterAt(x:int, y:int) -> Character:
 		if node.gridPosition == Vector2i(x, y):
 			return node
 	return null
+
+func SetAllCharacterNamesVisible(names_visible:bool) -> void:
+	for character in _characterCollection:
+		character.SetNameVisible(names_visible)
 	
 func AddObject(grhId:int, x:int, y:int) -> void:
 	if grhId > 0:

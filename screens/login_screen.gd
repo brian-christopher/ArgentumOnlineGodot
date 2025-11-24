@@ -13,6 +13,7 @@ var _state:State
 func _ready() -> void:
 	ClientInterface.connected.connect(_OnConnected)
 	ClientInterface.disconnected.connect(_OnDisconnected)
+	ClientInterface.connection_timeout.connect(_OnConnectionTimeout)
 	ClientInterface.dataReceived.connect(_OnDataReceived)
 	
 	_loginPanel.error.connect(func(message): 
@@ -29,6 +30,11 @@ func _OnConnected() -> void:
 func _OnDisconnected() -> void:
 	_state = State.None
 	_loginPanel.EnableAuthControls()
+
+func _OnConnectionTimeout() -> void:
+	_state = State.None
+	_loginPanel.EnableAuthControls()
+	Utils.ShowAlertDialog("Error de Conexión", "No se pudo conectar al servidor.\nEl intento de conexión ha excedido el tiempo límite.", self)
 	
 func _GetEnpoint() -> Dictionary:
 	return {

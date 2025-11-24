@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://bc75211y2ivfn"]
+
+[ext_resource type="Script" uid="uid://cdtr2piv8e8lj" path="res://ui/hub/guild_url_window.gd" id="1_guild_url"]
+
+[node name="GuildURLWindow" type="Window"]
+oversampling_override = 1.0
+title = "Editar URL del Clan"
+initial_position = 1
+size = Vector2i(400, 120)
+script = ExtResource("1_guild_url")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="URLLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Ingresa la URL del sitio web del clan:"
+
+[node name="URLInput" type="LineEdit" parent="VBox"]
+layout_mode = 2
+placeholder_text = "https://ejemplo.com"
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="CancelBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancelar"
+
+[node name="ConfirmBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Confirmar"
+
+[connection signal="pressed" from="VBox/ButtonsContainer/CancelBtn" to="." method="_on_cancel_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/ConfirmBtn" to="." method="_on_confirm_btn_pressed"]

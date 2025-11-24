@@ -20,14 +20,14 @@
 [sub_resource type="FontVariation" id="FontVariation_ltsmt"]
 base_font = ExtResource("7_rqp22")
 
-[sub_resource type="FontVariation" id="FontVariation_dlj5t"]
-base_font = ExtResource("8_s70vx")
+[sub_resource type="FontVariation" id="FontVariation_t2d6d"]
+base_font = ExtResource("10_7ceix")
 
 [sub_resource type="FontVariation" id="FontVariation_ehycb"]
 base_font = ExtResource("9_u317p")
 
-[sub_resource type="FontVariation" id="FontVariation_t2d6d"]
-base_font = ExtResource("10_7ceix")
+[sub_resource type="FontVariation" id="FontVariation_dlj5t"]
+base_font = ExtResource("8_s70vx")
 
 [sub_resource type="FontVariation" id="FontVariation_gwwhr"]
 base_font = ExtResource("7_rqp22")
@@ -115,9 +115,9 @@ offset_top = 5.0
 offset_right = 446.0
 offset_bottom = 105.0
 theme_override_fonts/normal_font = SubResource("FontVariation_ltsmt")
-theme_override_fonts/italics_font = SubResource("FontVariation_dlj5t")
-theme_override_fonts/bold_italics_font = SubResource("FontVariation_ehycb")
 theme_override_fonts/bold_font = SubResource("FontVariation_t2d6d")
+theme_override_fonts/bold_italics_font = SubResource("FontVariation_ehycb")
+theme_override_fonts/italics_font = SubResource("FontVariation_dlj5t")
 bbcode_enabled = true
 scroll_following = true
 

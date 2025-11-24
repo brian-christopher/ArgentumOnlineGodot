@@ -6,6 +6,9 @@ class_name SpellListPanel
 func _ready() -> void:
 	for i in Consts.MaxUserHechizos:
 		_item_list.add_item("(None)")
+	
+	# Conectar la selección de hechizos al sistema de macro
+	_item_list.item_selected.connect(_on_spell_selected)
 
 
 func get_selected_slot() -> int:
@@ -17,6 +20,20 @@ func get_selected_slot() -> int:
 
 func set_slot_text(slot:int, text:String) -> void:
 	_item_list.set_item_text(slot, text)
+
+
+func _on_spell_selected(index: int) -> void:
+	# Notificar al sistema de macro qué hechizo está seleccionado
+	SpellMacroSystem.set_selected_spell_index(index)
+	SpellMacroSystem.set_spell_list(self)
+	print("[SpellListPanel] Hechizo seleccionado: ", index, " - ", _item_list.get_item_text(index))
+
+
+func get_selected_spell_text() -> String:
+	var slot = get_selected_slot()
+	if slot == -1:
+		return ""
+	return _item_list.get_item_text(slot)
 
 
 func _on_btn_cast_pressed() -> void:

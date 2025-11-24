@@ -25,7 +25,11 @@ func CreateCharacter(data:CharacterCreate) -> Character:
 	character.renderer.helmet = data.helmet;
 	character.renderer.weapon = data.weapon;
 	character.renderer.shield = data.shield;
-	character.renderer.heading = data.heading; 
+	character.renderer.heading = data.heading;
+	
+	# Aplicar configuración global de visibilidad de nombres
+	character.SetNameVisible(Global.show_player_names)
+	
 	return character
 	
 func MoveCharacter(instanceId:int, heading:int) -> void:

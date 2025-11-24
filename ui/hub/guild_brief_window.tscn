@@ -1,0 +1,232 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5lal1v6knn4d"]
+
+[ext_resource type="Script" uid="uid://bkdha4jt2bm42" path="res://ui/hub/guild_brief_window.gd" id="1_guild_brief"]
+
+[node name="GuildBriefWindow" type="Window"]
+oversampling_override = 1.0
+title = "Detalles del Clan"
+initial_position = 1
+size = Vector2i(570, 560)
+script = ExtResource("1_guild_brief")
+
+[node name="MainScroll" type="ScrollContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="VBox" type="VBoxContainer" parent="MainScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BasicInfo" type="GridContainer" parent="MainScroll/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainScroll/VBox/BasicInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="GridContainer" parent="MainScroll/VBox/BasicInfo/HBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="NameLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Nombre:"
+
+[node name="NameValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="FounderLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Fundador:"
+
+[node name="FounderValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="CreationLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Fecha de Creación:"
+
+[node name="CreationValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="LeaderLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Líder:"
+
+[node name="LeaderValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="WebLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Sitio Web:"
+
+[node name="WebValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="MembersLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Miembros:"
+
+[node name="MembersValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "0"
+
+[node name="MarginContainer" type="MarginContainer" parent="MainScroll/VBox/BasicInfo/HBoxContainer"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer2" type="GridContainer" parent="MainScroll/VBox/BasicInfo/HBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="ElectionLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Elecciones:"
+
+[node name="ElectionValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "CERRADA"
+
+[node name="AlignmentLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Alineación:"
+
+[node name="AlignmentValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "-"
+
+[node name="EnemiesLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Enemigos:"
+
+[node name="EnemiesValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "0"
+
+[node name="AlliesLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Aliados:"
+
+[node name="AlliesValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "0"
+
+[node name="AntiFactionLabel" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Anti-Facción:"
+
+[node name="AntiFactionValue" type="Label" parent="MainScroll/VBox/BasicInfo/HBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "-"
+
+[node name="HSeparator2" type="HSeparator" parent="MainScroll/VBox"]
+layout_mode = 2
+
+[node name="CodexLabel" type="Label" parent="MainScroll/VBox"]
+layout_mode = 2
+text = "Códex del Clan:"
+
+[node name="CodexScroll" type="ScrollContainer" parent="MainScroll/VBox"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CodexContainer" type="VBoxContainer" parent="MainScroll/VBox/CodexScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Codex0" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex1" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex2" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex3" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex4" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex5" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex6" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Codex7" type="Label" parent="MainScroll/VBox/CodexScroll/CodexContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="MainScroll/VBox"]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="MainScroll/VBox"]
+layout_mode = 2
+text = "Descripción:"
+
+[node name="DescText" type="TextEdit" parent="MainScroll/VBox"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+editable = false
+
+[node name="HSeparator4" type="HSeparator" parent="MainScroll/VBox"]
+layout_mode = 2
+
+[node name="LeaderButtons" type="HBoxContainer" parent="MainScroll/VBox"]
+layout_mode = 2
+
+[node name="OfferPeaceBtn" type="Button" parent="MainScroll/VBox/LeaderButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ofrecer Paz"
+
+[node name="OfferAllianceBtn" type="Button" parent="MainScroll/VBox/LeaderButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ofrecer Alianza"
+
+[node name="DeclareWarBtn" type="Button" parent="MainScroll/VBox/LeaderButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Declarar Guerra"
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MainScroll/VBox"]
+layout_mode = 2
+
+[node name="RequestMembershipBtn" type="Button" parent="MainScroll/VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Solicitar Ingreso"
+
+[node name="CloseBtn" type="Button" parent="MainScroll/VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cerrar"
+
+[connection signal="pressed" from="MainScroll/VBox/LeaderButtons/OfferPeaceBtn" to="." method="_on_offer_peace_btn_pressed"]
+[connection signal="pressed" from="MainScroll/VBox/LeaderButtons/OfferAllianceBtn" to="." method="_on_offer_alliance_btn_pressed"]
+[connection signal="pressed" from="MainScroll/VBox/LeaderButtons/DeclareWarBtn" to="." method="_on_declare_war_btn_pressed"]
+[connection signal="pressed" from="MainScroll/VBox/ButtonsContainer/RequestMembershipBtn" to="." method="_on_request_membership_btn_pressed"]
+[connection signal="pressed" from="MainScroll/VBox/ButtonsContainer/CloseBtn" to="." method="_on_close_btn_pressed"]

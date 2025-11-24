@@ -73,8 +73,27 @@ static func GetUnicodeString(stream:StreamPeer) -> String:
 	var size = stream.get_16()
 	if size > 0:
 		var data:PackedByteArray = stream.get_data(size)[1]
-		return data.get_string_from_ascii() 
+		return data.get_string_from_multibyte_char()
 	return ""
+
+static func GetUnicodeArrayString(stream:StreamPeer) -> Array[String]:
+	var size = stream.get_16()
+	if size > 0:
+		var data:PackedByteArray = stream.get_data(size)[1]
+		
+		var temp:PackedByteArray = PackedByteArray()
+		var result:Array[String] = []
+		for i in range(0, data.size()):
+			if data[i] == 0:
+				result.append(temp.get_string_from_ascii())
+				temp = PackedByteArray()
+			else:
+				temp.append(data[i])
+		if temp.size() > 0:
+			result.append(temp.get_string_from_ascii())
+		return result
+	return []
+
 	
 static func Utf8ToLatin1(text:String) -> PackedByteArray:
 	var latin1_bytes = PackedByteArray()

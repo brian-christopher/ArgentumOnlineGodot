@@ -18,6 +18,8 @@ const SkillsWindowScene = preload("res://ui/hub/skills_window.tscn")
 const PasswordChangeWindowScene = preload("res://ui/hub/password_change_window.tscn")
 const GuildFoundationWindowScene = preload("res://ui/hub/guild_foundation_window.tscn")
 const StatsWindowScene = preload("res://ui/hub/stats_window.tscn")
+const SpellLearnDialogScene = preload("res://ui/hub/spell_learn_dialog.tscn")
+const SpawnListWindowScene = preload("res://ui/hub/spawn_list_window.tscn")
 
 @export var _inventoryContainer:InventoryContainer 
 @export var _consoleRichTextLabel:RichTextLabel
@@ -39,6 +41,7 @@ const StatsWindowScene = preload("res://ui/hub/stats_window.tscn")
 @onready var _btnStadistics = get_node("Buttons-Misc/btnStadistics")
 @onready var _btnOptions = get_node("Buttons-Misc/btnOptions")
 @onready var _btnSkills = get_node("Buttons-Misc/btnSkills")
+@onready var _btnGuilds = get_node("Buttons-Misc/btnGuilds")
 # Botón de cambio de contraseña - puede no existir en todas las escenas
 var _btnPasswordChange
 
@@ -48,7 +51,14 @@ var _options_window
 var _skills_window
 var _password_change_window
 var _guild_foundation_window
+var _guild_leader_window
+var _guild_admin_window
+var _guild_member_window
+var _guild_brief_window
+var _guild_news_window
+var _guild_proposals_window
 var _stats_window
+var _spawn_list_window
 
 var _user_weapon_slot:int
 var _user_shield_slot:int
@@ -56,9 +66,24 @@ var _user_helmet_slot:int
 var _user_armor_slot:int
 
 func _ready() -> void:
+	# Inicializar el sistema de hotkeys
+	HotkeyConfig.load_hotkey_config()
+	
+	# Conectar señales del sistema de hotkeys
+	HotkeyConfig.hotkey_changed.connect(_on_hotkey_changed)
+	
+	# Resto del código existente...
 	_btnOptions.pressed.connect(Callable(self, "_on_btn_options_pressed"))
 	_btnSkills.pressed.connect(Callable(self, "_on_btn_skills_pressed"))
 	_btnStadistics.pressed.connect(Callable(self, "_on_btn_stadistics_pressed"))
+	_btnGuilds.pressed.connect(Callable(self, "_on_btn_guilds_pressed"))
+	Global.connect("console_font_size_changed", Callable(self, "_on_console_font_size_changed"))
+	Global.connect("player_names_visibility_changed", Callable(self, "_on_player_names_visibility_changed"))
+	Global.connect("fps_visibility_changed", Callable(self, "_on_fps_visibility_changed"))
+	_apply_console_font_size(Global.consoleFontSize)
+	
+	# Inicializar el sistema de macro de hechizos
+	_setup_spell_macro_system()
 	
 	# Intentar obtener el botón de cambio de contraseña si existe
 	_btnPasswordChange = get_node_or_null("Buttons-Misc/btnPasswordChange")
@@ -69,6 +94,7 @@ func _ready() -> void:
 	_btnOptions.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	_btnSkills.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	_btnStadistics.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_btnGuilds.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 func Init(gameContext:GameContext) -> void:
 	_gameContext = gameContext
@@ -188,6 +214,21 @@ func update_equipment_label(slot:int, item_stack:ItemStack) -> void:
 func _CameraTransformVector(vec:Vector2) -> Vector2:
 	return _camera.get_canvas_transform().affine_inverse() * vec
 
+func _on_console_font_size_changed(value:int) -> void:
+	_apply_console_font_size(value)
+
+func _on_player_names_visibility_changed(_visible:bool) -> void:
+	_apply_name_visibility_to_all_characters()
+
+func _on_fps_visibility_changed(_visible:bool) -> void:
+	_apply_fps_visibility()
+
+func _apply_console_font_size(value:int) -> void:
+	_consoleRichTextLabel.set("theme_override_font_sizes/normal_font_size", value)
+	_consoleRichTextLabel.set("theme_override_font_sizes/bold_font_size", value)
+	_consoleRichTextLabel.set("theme_override_font_sizes/italics_font_size", value)
+	_consoleRichTextLabel.set("theme_override_font_sizes/bold_italics_font_size", value)
+
 func _HandleMouseInput(event:InputEventMouseButton) -> void:
 	var mouse_tile_position = Vector2i((_CameraTransformVector(event.position) / 32.0).ceil()) 
 	
@@ -256,8 +297,14 @@ func _handle_key_event(event:InputEventKey) -> void:
 		_exit_game()
 	if event.is_action_pressed("ToggleSafeMode"):
 		GameProtocol.WriteSafeToggle()
-	if event.is_action_pressed("ToggleResuscitationSafe"):
-		GameProtocol.WriteResuscitationToggle()
+	if event.is_action_pressed("SpellMacro"):
+		SpellMacroSystem.toggle_spell_macro()
+	
+	# Nuevos hotkeys configurables
+	if event.is_action_pressed("ToggleName"):
+		_toggle_player_names()
+	if event.is_action_pressed("ToggleFPS"):
+		_toggle_fps_display()
 	
 func _unhandled_key_input(event: InputEvent) -> void: 
 	if event is InputEventKey:
@@ -318,7 +365,12 @@ func _use_object(double_click = false) -> void:
 	var slot = _inventoryContainer.GetSelectedSlot() 
 	if slot == -1 || _gameContext.trading || _gameContext.pause: return
 	
-	GameProtocol.WriteUseItem(slot + 1)
+	# Verificar si es un pergamino para mostrar diálogo de confirmación
+	var item_stack = _gameContext.playerInventory.GetSlot(slot)
+	if item_stack and item_stack.item.type == Enums.eOBJType.eOBJType_otPergaminos:
+		_show_spell_learn_dialog(item_stack.item.name, slot + 1)
+	else:
+		GameProtocol.WriteUseItem(slot + 1)
 	
 	
 func _pickup_object() -> void:
@@ -356,6 +408,64 @@ func _request_position_update() -> void:
 
 func _exit_game() -> void:
 	GameProtocol.WriteQuit()
+
+func _on_hotkey_changed(action_name: String, key_code: int):
+	print("[HubController] Hotkey cambiado: ", action_name, " -> ", HotkeyConfig.get_key_name(key_code))
+	# Aquí podrías agregar lógica adicional cuando cambian las teclas
+
+func _toggle_player_names():
+	# Toggle mostrar/ocultar nombres de jugadores
+	Global.show_player_names = not Global.show_player_names
+	ShowConsoleMessage("Nombres de personajes " + ("visibles" if Global.show_player_names else "ocultos"), 
+		GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
+
+func _apply_name_visibility_to_all_characters():
+	# Buscar el map_container en el árbol de nodos
+	var game_screen = get_tree().get_first_node_in_group("game_screen")
+	if game_screen:
+		var map_container = game_screen.get_node_or_null("MapContainer")
+		if map_container:
+			map_container.SetAllCharacterNamesVisible(Global.show_player_names)
+		else:
+			print("No se encontró MapContainer")
+	else:
+		print("No se encontró game_screen")
+
+func _toggle_fps_display():
+	# Toggle mostrar/ocultar FPS
+	Global.show_fps_counter = not Global.show_fps_counter
+	ShowConsoleMessage("Contador FPS " + ("visible" if Global.show_fps_counter else "oculto"), 
+		GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
+
+func _apply_fps_visibility():
+	# Crear o mostrar/ocultar contador FPS
+	var fps_label = get_node_or_null("FPSLabel")
+	
+	if Global.show_fps_counter:
+		if not fps_label:
+			# Crear label para FPS si no existe
+			fps_label = Label.new()
+			fps_label.name = "FPSLabel"
+			fps_label.position = Vector2(16, 140)
+			fps_label.add_theme_font_size_override("font_size", 16)
+			fps_label.add_theme_color_override("font_color", Color.WHITE)
+			add_child(fps_label)
+		
+		# Conectar al proceso para actualizar FPS
+		if not fps_label.is_connected("tree_exited", _on_fps_tree_exited):
+			set_process(true)
+	else:
+		if fps_label:
+			fps_label.queue_free()
+
+func _process(_delta):
+	if Global.show_fps_counter:
+		var fps_label = get_node_or_null("FPSLabel")
+		if fps_label:
+			fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
+
+func _on_fps_tree_exited():
+	set_process(false)
 
 func _tam_animal() -> void:
 	if !_gameContext.player_stats.is_alive():
@@ -536,28 +646,29 @@ func show_password_change_window() -> void:
 func show_guild_foundation_window() -> void:
 	if _guild_foundation_window == null:
 		_guild_foundation_window = GuildFoundationWindowScene.instantiate()
-		_guild_foundation_window.form_submitted.connect(_on_guild_foundation_submitted)
+		_guild_foundation_window.next_pressed.connect(_on_guild_foundation_next)
 		add_child(_guild_foundation_window)
 	_guild_foundation_window.show_window()
 
-# Maneja el envío del formulario de fundación de clan
-func _on_guild_foundation_submitted(clan_name: String, clan_abbreviation: String, url: String, description: String) -> void:
+# Maneja cuando se presiona "Siguiente" en el formulario de fundación
+func _on_guild_foundation_next(clan_name: String, url: String) -> void:
 	# Validar que el nombre del clan no esté vacío
 	if clan_name.strip_edges().is_empty():
 		ShowConsoleMessage("¡El nombre del clan no puede estar vacío!", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
 		return
-		
-	# Validar la abreviatura (3-5 letras mayúsculas)
-	if clan_abbreviation.length() < 3 or clan_abbreviation.length() > 5:
-		ShowConsoleMessage("La abreviatura debe tener entre 3 y 5 letras mayúsculas.", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
-		return
-		
-	if not clan_abbreviation.is_valid_identifier():
-		ShowConsoleMessage("La abreviatura solo puede contener letras mayúsculas.", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
-		return
 	
+	# Abrir la ventana de detalles (códex y descripción)
+	_show_guild_details_window(clan_name, url)
+
+# Muestra la ventana de detalles del clan (códex y descripción)
+func _show_guild_details_window(clan_name: String, url: String) -> void:
+	var guild_details_scene = load("res://ui/hub/guild_details_window.tscn")
+	var guild_details_window = guild_details_scene.instantiate()
+	add_child(guild_details_window)
 	
-	ShowConsoleMessage("¡Solicitud de fundación de clan enviada al consejo real!", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
+	# Configurar la ventana para modo de creación
+	guild_details_window.setup_for_creation(clan_name, url)
+	guild_details_window.popup_centered()
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Si la consola está visible y se presiona ESC, la cerramos
@@ -580,3 +691,138 @@ func _on_console_gui_input(event: InputEvent) -> void:
 
 func _on_console_mouse_exited() -> void:
 	_console_blocked = false
+
+func _on_btn_guilds_pressed() -> void:
+	print("[DEBUG] Botón de clanes presionado")
+	# Solo solicitar información al servidor
+	# El servidor responderá con GuildList, GuildMemberInfo o GuildLeaderInfo según el estado del jugador
+	print("[DEBUG] Enviando WriteRequestGuildLeaderInfo...")
+	GameProtocol.WriteRequestGuildLeaderInfo()
+	ClientInterface.Send(GameProtocol.Flush())
+	print("[DEBUG] WriteRequestGuildLeaderInfo enviado y flushed")
+
+## Muestra la ventana de detalles del clan con los datos recibidos
+func show_guild_details(data: Dictionary) -> void:
+	if _guild_brief_window == null:
+		var guild_brief_scene = load("res://ui/hub/guild_brief_window.tscn")
+		_guild_brief_window = guild_brief_scene.instantiate()
+		add_child(_guild_brief_window)
+	_guild_brief_window.set_guild_details(data)
+	_guild_brief_window.popup_centered()
+
+## Actualiza los datos de la ventana de líder del clan (cuando el jugador ES líder)
+func update_guild_leader_data(guilds: Array, members: Array, news: String, requests: Array) -> void:
+	if _guild_leader_window == null:
+		var guild_leader_scene = load("res://ui/hub/guild_leader_window.tscn")
+		_guild_leader_window = guild_leader_scene.instantiate()
+		add_child(_guild_leader_window)
+	_guild_leader_window.set_guild_data(guilds, members, news, requests)
+	_guild_leader_window.popup_centered()
+
+## Muestra la ventana de noticias del clan
+func show_guild_news(news: String, enemies: Array, allies: Array) -> void:
+	if _guild_news_window == null:
+		var guild_news_scene = load("res://ui/hub/guild_news_window.tscn")
+		_guild_news_window = guild_news_scene.instantiate()
+		add_child(_guild_news_window)
+	_guild_news_window.set_guild_news(news, enemies, allies)
+	_guild_news_window.popup_centered()
+
+## Muestra los detalles de una propuesta
+func show_offer_details(details: String) -> void:
+	var dialog = AcceptDialog.new()
+	dialog.dialog_text = details
+	dialog.title = "Detalles de la Propuesta"
+	add_child(dialog)
+	dialog.popup_centered()
+
+## Muestra la lista de propuestas de alianza
+func show_alliance_proposals(guilds: Array) -> void:
+	if _guild_proposals_window == null:
+		var proposals_scene = load("res://ui/hub/guild_proposals_window.tscn")
+		_guild_proposals_window = proposals_scene.instantiate()
+		add_child(_guild_proposals_window)
+	_guild_proposals_window.set_proposals(2, guilds)  # 2 = ALLIANCE
+	_guild_proposals_window.popup_centered()
+
+## Muestra la lista de propuestas de paz
+func show_peace_proposals(guilds: Array) -> void:
+	if _guild_proposals_window == null:
+		var proposals_scene = load("res://ui/hub/guild_proposals_window.tscn")
+		_guild_proposals_window = proposals_scene.instantiate()
+		add_child(_guild_proposals_window)
+	_guild_proposals_window.set_proposals(1, guilds)  # 1 = PEACE
+	_guild_proposals_window.popup_centered()
+
+## Muestra la lista simple de clanes (cuando el jugador NO tiene clan)
+func show_guild_list(guilds: Array) -> void:
+	if _guild_admin_window == null:
+		var admin_scene = load("res://ui/hub/guild_admin_window.tscn")
+		_guild_admin_window = admin_scene.instantiate()
+		add_child(_guild_admin_window)
+	_guild_admin_window.set_guilds(guilds)
+	_guild_admin_window.popup_centered()
+
+## Muestra la ventana de miembro del clan (cuando el jugador tiene clan pero NO es líder)
+func show_guild_member_info(guilds: Array, members: Array) -> void:
+	if _guild_member_window == null:
+		var member_scene = load("res://ui/hub/guild_member_window.tscn")
+		_guild_member_window = member_scene.instantiate()
+		add_child(_guild_member_window)
+	_guild_member_window.set_guild_data(guilds, members)
+	_guild_member_window.popup_centered()
+
+## Muestra la ventana de entrenar con lista de criaturas invocables
+func show_spawn_list(creatures: Array[String]) -> void:
+	if _spawn_list_window == null:
+		_spawn_list_window = SpawnListWindowScene.instantiate()
+		add_child(_spawn_list_window)
+	_spawn_list_window.set_creatures(creatures)
+	_spawn_list_window.popup_centered()
+
+## Configura el sistema de macro de hechizos
+func _setup_spell_macro_system() -> void:
+	# Conectar la consola al sistema de macro
+	SpellMacroSystem.set_console(_consoleRichTextLabel)
+	
+	# Conectar la lista de hechizos al sistema de macro
+	if spell_list_panel:
+		SpellMacroSystem.set_spell_list(spell_list_panel)
+		print("[SpellMacroSystem] Lista de hechizos conectada")
+	else:
+		print("[SpellMacroSystem] ADVERTENCIA: No se encontró spell_list_panel")
+	
+	# NUEVO: Conectar el hub_controller para acceso al cursor
+	SpellMacroSystem.set_hub_controller(self)
+	print("[SpellMacroSystem] HubController conectado para cursor")
+	
+	print("[SpellMacroSystem] Sistema de macro F7 inicializado")
+
+## Obtiene la posición del tile donde está el cursor del mouse
+## Esta función es pública para que otros sistemas (como SpellMacroSystem) la usen
+func get_mouse_tile_position() -> Vector2i:
+	var viewport = get_viewport()
+	if not viewport:
+		return Vector2i.ZERO
+	
+	var mouse_pos = viewport.get_mouse_position()
+	var mouse_tile_position = Vector2i((_CameraTransformVector(mouse_pos) / 32.0).ceil())
+	mouse_tile_position.y =mouse_tile_position.y - 5
+	return mouse_tile_position
+
+## Muestra el diálogo de confirmación para aprender hechizos
+func _show_spell_learn_dialog(spell_name: String, slot: int) -> void:
+	var dialog = SpellLearnDialogScene.instantiate() as SpellLearnDialog
+	add_child(dialog)
+	
+	# Configurar el nombre del hechizo
+	dialog.set_spell_name(spell_name)
+	
+	# Conectar la señal de confirmación
+	dialog.spell_learn_confirmed.connect(func(learn: bool):
+		if learn:
+			GameProtocol.WriteUseItem(slot)
+	)
+	
+	# Mostrar el diálogo centrado
+	dialog.popup_centered()

@@ -18,8 +18,12 @@ static func from_buffer(_stream: StreamPeerBuffer, p_parent_node: Node) -> ShowG
 
 # Método para manejar la lógica cuando se recibe este paquete
 func handle() -> void:
-	# Mostrar la ventana de fundación de clan
-	if parent_node and parent_node.has_method("show_guild_foundation_window"):
-		parent_node.show_guild_foundation_window()
+	# El parent_node es game_screen, necesitamos acceder a _gameInput (hub_controller)
+	if parent_node and parent_node.has_method("get") and parent_node.get("_gameInput"):
+		var hub_controller = parent_node.get("_gameInput")
+		if hub_controller and hub_controller.has_method("show_guild_foundation_window"):
+			hub_controller.show_guild_foundation_window()
+		else:
+			push_error("No se pudo mostrar la ventana de fundación de clan. HubController no disponible.")
 	else:
-		push_error("No se pudo mostrar la ventana de fundación de clan. Nodo padre inválido o método no disponible.")
+		push_error("No se pudo mostrar la ventana de fundación de clan. Nodo padre inválido.")

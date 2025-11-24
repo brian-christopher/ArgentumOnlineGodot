@@ -28,6 +28,7 @@ static var command_handler:Dictionary[String, Callable] = {
 	"consulta": consultation,
 	"ayuda": help,
 	"enlistar": enlist,
+	"pruebadialogo": test_dialog,
 	"informacion": information,
 	"recompensa": reward,
 	"motd": request_motd,
@@ -57,7 +58,9 @@ static var command_handler:Dictionary[String, Callable] = {
 	"partylider": party_set_leader,
 	"acceptparty": party_accept_member,
 	"telep": teleport_char,
-	"teleploc": teleport_me_to_target
+	"teleploc": teleport_me_to_target,
+	"hogar": home,
+	"ping": ping
 }
 
 static func process(newText: String, hub_controller:HubController, game_context:GameContext) -> bool:
@@ -259,6 +262,9 @@ static func train_list(args:ChatCommandArgs) -> void:
 	if !args.game_context.player_stats.is_alive():
 		args.hub_controller.ShowConsoleMessage("¡¡Estás muerto!!", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
 		return
+	
+	# Informar al usuario que necesita seleccionar un NPC entrenador
+	args.hub_controller.ShowConsoleMessage("Haz click sobre un entrenador para ver las criaturas disponibles...", GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
 	
 	GameProtocol.WriteTrainList()
 
@@ -554,3 +560,58 @@ static func guild_fundate(args:ChatCommandArgs) -> void:
 	
 	# Enviar solicitud al servidor para verificar si el jugador puede fundar un clan
 	GameProtocol.WriteGuildFundate()
+
+static func home(args:ChatCommandArgs) -> void:
+	# El comando /HOGAR funciona solo cuando estás muerto
+	if args.game_context.player_stats.is_alive():
+		args.hub_controller.ShowConsoleMessage("Debes estar muerto para utilizar este comando.", 
+			GameAssets.FontDataList[Enums.FontTypeNames.FontType_Info])
+		return
+	
+	# Enviar comando al servidor (solo si está muerto)
+	GameProtocol.WriteHome()
+
+static func ping(args:ChatCommandArgs) -> void:
+	# Prevenir envío de ping si ya hay uno pendiente (como en VB6)
+	if args.game_context.pingTime != 0:
+		return
+	
+	# Enviar ping al servidor y registrar tiempo
+	GameProtocol.WritePing()
+	
+	# Flush del buffer inmediatamente (como en VB6)
+	if !GameProtocol.IsEmpty():
+		ClientInterface.Send(GameProtocol.Flush())
+	
+	# Registrar el tiempo después del envío
+	args.game_context.pingTime = Time.get_ticks_msec()
+
+static func ping_from_button() -> void:
+	# Enviar ping desde botón (sin verificar ping pendiente)
+	GameProtocol.WritePing()
+	
+	# Flush del buffer inmediatamente (como en VB6)
+	if !GameProtocol.IsEmpty():
+		ClientInterface.Send(GameProtocol.Flush())
+
+static func test_dialog(args:ChatCommandArgs) -> void:
+	var test_messages = [
+		"¡Por los antiguos dragones de Argentum! Este es un mensaje de prueba con texto tipográfico animado.",
+		"Velocidad: rápida",
+		"Este es un mensaje más largo para probar cómo funciona el autowrap cuando el texto es extenso y necesita hacer saltos de línea automáticamente mientras se escribe letra por letra.",
+		"¡Mágia y poder en cada palabra!"
+	]
+	
+	var random_message = test_messages[randi() % test_messages.size()]
+	var color = Color.WHITE
+	
+	# Simular el comando Say del personaje
+	if args.game_context and args.game_context.has_method("Say"):
+		args.game_context.Say(random_message, color)
+	else:
+		# Buscar el personaje del jugador en la escena
+		var game_screen = args.game_context.get_parent()
+		if game_screen and game_screen.has_node("Player"):
+			var player = game_screen.get_node("Player") as Character
+			if player:
+				player.Say(random_message, color)

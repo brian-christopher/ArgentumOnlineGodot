@@ -79,6 +79,11 @@ enum Skill{
 	FundirMetal = 88
 }
 
+enum eMoveType {
+	Inventory = 1,
+	Bank
+}
+
 enum eOBJType {
 	eOBJType_Null = 0,
 	eOBJType_otUseOnce = 1,

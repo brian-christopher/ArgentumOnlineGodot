@@ -42,6 +42,12 @@ func _on_next_pressed() -> void:
 		_clan_name_edit.grab_focus()
 		return
 	
+	# Validar longitud del nombre (máximo 30 caracteres como en VB6)
+	if clan_name.length() > 30:
+		_show_error("El nombre del clan es demasiado extenso (máximo 30 caracteres).")
+		_clan_name_edit.grab_focus()
+		return
+	
 	# Si no se proporciona URL, dejarla vacía
 	if url.is_empty():
 		url = ""

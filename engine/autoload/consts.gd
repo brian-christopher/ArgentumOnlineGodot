@@ -20,7 +20,7 @@ const CuerpoFragataFantasmal = 87
 
 const Paso1 = 23
 const Paso2 = 24
-const PasoNavegando = 25
+const PasoNavegando = 50
 
 const bCabeza = 1
 const bPiernaIzquierda = 2

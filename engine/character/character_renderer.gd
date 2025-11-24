@@ -80,10 +80,31 @@ func _set_helmet(id:int) -> void:
 func _set_head(id:int) -> void:
 	_head = id
 	_headAnimatedSprite.sprite_frames = _LoadSpriteFrames("res://Resources/Character/Heads/head_%d.tres" % id)
+	
+	# Special correction for ghost head - raise it higher
+	if id == Consts.CabezaCasper:
+		var current_pos = _headAnimatedSprite.position
+		_headAnimatedSprite.position = Vector2(current_pos.x, current_pos.y - 8)
 
 func _set_body(id:int) -> void:
 	_body = id
 	_bodyAnimatedSprite.sprite_frames = _LoadSpriteFrames("res://Resources/Character/Bodies/body_%d.tres" % id)
+	
+	# Apply head offset for different body types (enanos, gomos, etc.)
+	if id > 0 and id < GameAssets.BodyAnimationList.size():
+		var body_data = GameAssets.BodyAnimationList[id]
+		var head_offset = Vector2(body_data.offsetX, body_data.offsetY)
+		if head_offset.y <= 0:
+			head_offset.y -= 2
+		_headAnimatedSprite.position = head_offset
+		_helmetAnimatedSprite.position = head_offset
+	
+	# Special correction for ghost bodies - raise head to human adult height
+	if id == Consts.CuerpoFragataFantasmal or id in Consts.ShipIds:
+		# Position head at normal human height (approximately -5 pixels from body center)
+		var ghost_head_offset = Vector2(0, -5)
+		_headAnimatedSprite.position = ghost_head_offset
+		_helmetAnimatedSprite.position = ghost_head_offset
 	
 	if _verticalAlign:
 		if _bodyAnimatedSprite.sprite_frames.get_frame_count("idle_south"):

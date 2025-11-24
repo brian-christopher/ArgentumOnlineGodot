@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://e5601pu3xtfx"]
+
+[ext_resource type="Script" uid="uid://b6f6y131nlrf" path="res://ui/hub/guild_member_window.gd" id="1_guild_member"]
+
+[node name="GuildMemberWindow" type="Window"]
+oversampling_override = 1.0
+title = "Información del Clan"
+initial_position = 1
+size = Vector2i(610, 450)
+script = ExtResource("1_guild_member")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="MainContent" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftPanel" type="VBoxContainer" parent="VBox/MainContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GuildsLabel" type="Label" parent="VBox/MainContent/LeftPanel"]
+layout_mode = 2
+text = "Clanes del Mundo"
+
+[node name="SearchGuilds" type="LineEdit" parent="VBox/MainContent/LeftPanel"]
+layout_mode = 2
+placeholder_text = "Buscar clan..."
+
+[node name="GuildsList" type="ItemList" parent="VBox/MainContent/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailsBtn" type="Button" parent="VBox/MainContent/LeftPanel"]
+layout_mode = 2
+text = "Ver Detalles del Clan"
+
+[node name="RightPanel" type="VBoxContainer" parent="VBox/MainContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MembersLabel" type="Label" parent="VBox/MainContent/RightPanel"]
+layout_mode = 2
+text = "Miembros de Mi Clan (0)"
+
+[node name="SearchMembers" type="LineEdit" parent="VBox/MainContent/RightPanel"]
+layout_mode = 2
+placeholder_text = "Buscar miembro..."
+
+[node name="MembersList" type="ItemList" parent="VBox/MainContent/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NewsBtn" type="Button" parent="VBox/MainContent/RightPanel"]
+layout_mode = 2
+text = "Ver Noticias del Clan"
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="VBox/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cerrar"
+
+[connection signal="text_changed" from="VBox/MainContent/LeftPanel/SearchGuilds" to="." method="_on_search_guilds_text_changed"]
+[connection signal="item_selected" from="VBox/MainContent/LeftPanel/GuildsList" to="." method="_on_guilds_list_item_selected"]
+[connection signal="pressed" from="VBox/MainContent/LeftPanel/DetailsBtn" to="." method="_on_details_btn_pressed"]
+[connection signal="text_changed" from="VBox/MainContent/RightPanel/SearchMembers" to="." method="_on_search_members_text_changed"]
+[connection signal="item_selected" from="VBox/MainContent/RightPanel/MembersList" to="." method="_on_members_list_item_selected"]
+[connection signal="pressed" from="VBox/MainContent/RightPanel/NewsBtn" to="." method="_on_news_btn_pressed"]
+[connection signal="pressed" from="VBox/ButtonsContainer/CloseBtn" to="." method="_on_close_btn_pressed"]
